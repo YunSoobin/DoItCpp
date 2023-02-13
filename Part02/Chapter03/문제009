@@ -1,0 +1,105 @@
+#include <iostream>
+
+using namespace std;
+
+int min_num[4];
+int result;
+void Add(char c);
+void Del(char c);
+void Check();
+
+int main()
+{
+  ios::sync_with_stdio(false);
+  cin.tie(NULL);
+  cout.tie(NULL);
+
+  int S, P;
+  cin >> S >> P;
+  char arr[1000001];
+  for(int i = 0; i < S; i++)
+  {
+    cin >> arr[i];
+  }
+  
+  for(int i = 0; i < 4; i++)
+  {
+    cin >> min_num[i];
+  }
+
+  result = 0;
+  for(int i = 0; i < P; i++)
+  {
+    Add(arr[i]);
+  }
+  Check();
+
+  for(int i = 0; i < S - P; i++)
+  {
+    Del(arr[i]);
+    Add(arr[P + i]);
+    Check();
+  }
+
+  cout << result << endl;
+}
+
+void Add(char c)
+{
+  switch(c)
+  {
+    case 'A':
+    {
+      min_num[0]--;
+      break;
+    }
+    case 'C':
+    {
+      min_num[1]--;
+      break;  
+    }
+    case 'G':
+    {
+      min_num[2]--;
+      break;
+    }
+    case 'T':
+    {
+      min_num[3]--;
+      break;
+    }
+  }
+}
+
+void Del(char c)
+{
+  switch(c)
+  {
+    case 'A':
+    {
+      min_num[0]++;
+      break;
+    }
+    case 'C':
+    {
+      min_num[1]++;
+      break;  
+    }
+    case 'G':
+    {
+      min_num[2]++;
+      break;
+    }
+    case 'T':
+    {
+      min_num[3]++;
+      break;
+    }
+  }
+}
+
+void Check()
+{
+  if(min_num[0] <= 0 && min_num[1] <= 0 && min_num[2] <= 0 && min_num[3] <= 0)
+    result++;
+}
