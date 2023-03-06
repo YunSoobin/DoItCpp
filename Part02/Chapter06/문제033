@@ -1,0 +1,36 @@
+#include <iostream>
+#include <queue>
+
+using namespace std;
+
+int main()
+{
+  ios::sync_with_stdio(false);
+  cin.tie(NULL);
+  cout.tie(NULL);
+
+  int N;
+  cin >> N;
+
+  priority_queue<int, vector<int>, greater<int>> myqueue;
+  int num;
+  for(int i = 0; i < N; i++)
+  {
+    cin >> num;
+    myqueue.push(num);
+  }
+
+  int result = 0;
+  int a, b;
+  while(myqueue.size() >= 2)
+  {
+    a = myqueue.top();
+    myqueue.pop();
+    b = myqueue.top();
+    myqueue.pop();
+    result += (a + b);
+    myqueue.push(a + b);
+  }
+  
+  cout << result << "\n";
+}
