@@ -1,0 +1,61 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+
+using namespace std;
+
+bool isP(int n);
+
+int main()
+{
+  ios::sync_with_stdio(false);
+  cin.tie(NULL);
+  cout.tie(NULL);
+
+  int N;
+  cin >> N;
+  
+  int max = 1003001;
+  vector<int> prime(max + 1, 0);
+
+  for(int i = 2; i <= max; i++)
+  {
+    prime[i] = i;
+  }
+  
+  for(int i = 2; i <= sqrt(max); i++)
+  {
+    int j = 2;
+    while(i * j <= max)
+    {
+      if(prime[i * j] != 0)
+      {
+        prime[i * j] = 0;
+      } 
+      j++;
+    }
+  }
+
+  for(int i = N; i <= max; i++)
+  {
+    if(prime[i] != 0 && isP(i))
+    {
+      cout << i << endl;
+      break;
+    }
+  }
+}
+
+bool isP(int n)
+{
+  string str = to_string(n);
+  int len = str.length();
+  for(int i = 0; i < len; i++)
+  {
+    if(str[i] != str[len - i - 1])
+    {
+      return false;
+    }
+  }
+  return true;
+}
