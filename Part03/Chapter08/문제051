@@ -1,0 +1,84 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+static vector<int> parent;
+int find_parent(int a);
+void union_parent(int a, int b);
+
+int main()
+{
+  ios::sync_with_stdio(false);
+  cin.tie(NULL);
+  cout.tie(NULL);
+
+  int N, M;
+  cin >> N >> M;
+
+  vector<vector<int>> graph(N + 1);
+  parent.resize(N + 1);
+  for(int i = 1; i <= N; i++)
+  {
+    parent[i] = i;
+  }
+  
+  for(int i = 1; i <= N; i++)
+  {
+    for(int j = 1; j <= N; j++)
+    {
+      int n;
+      cin >> n;
+      if(i != j && find_parent(i) != find_parent(j) && n == 1)
+      {
+        union_parent(i, j);
+      }
+    }
+  }
+
+  bool connect = true;
+  int num;
+  cin >> num;
+  int result = parent[num];
+  
+  for(int i = 0; i < M - 1; i++)
+  {
+    cin >> num;
+    if(result != parent[num])
+    {
+      connect = false;
+    }
+  }
+
+  if(connect)
+  {
+    cout << "YES";
+  }
+  else
+  {
+    cout << "NO";
+  }
+
+}
+
+int find_parent(int a)
+{
+  if(parent[a] == a)
+  {
+    return a;
+  }
+  else
+  {
+    return parent[a] = find_parent(parent[a]);
+  }
+}
+
+void union_parent(int a, int b)
+{
+  a = find_parent(a);
+  b = find_parent(b);
+
+  if(a != b)
+  {
+    parent[b] = a;
+  }
+}
