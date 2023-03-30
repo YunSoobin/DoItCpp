@@ -1,0 +1,70 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+using namespace std;
+
+int main()
+{
+  ios::sync_with_stdio(false);
+  cin.tie(NULL);
+  cout.tie(NULL);
+
+  int N;
+  cin >> N;
+
+  vector<int> time(N + 1);
+  vector<int> indegree(N + 1, 0);
+  vector<vector<int>> out_node(N + 1);
+  
+  for(int i = 1; i <= N; i++)
+  {
+    cin >> time[i];
+
+    while(true)
+    {
+      int before;
+      cin >> before;
+      if(before == -1)
+      {
+        break;
+      }
+      indegree[i]++;
+      out_node[before].push_back(i);
+    }
+  }
+
+  vector<int> result(N + 1, 0);
+  queue<int> queue;
+  
+  for(int i = 1; i <= N; i++)
+  {
+    if(indegree[i] == 0)
+    {
+      queue.push(i);
+    }
+  }
+
+  while(!queue.empty())
+  {
+    int now = queue.front();
+    queue.pop();
+
+    result[now] += time[now];
+
+    for(int n : out_node[now])
+    {
+      indegree[n]--;
+      if(indegree[n] == 0)
+      {
+        queue.push(n);
+      }
+
+      result[n] = max(result[n], result[now]);
+    }
+  }
+
+  for(int i = 1; i <= N; i++)
+  {
+    cout << result[i] << "\n";
+  }
+}
