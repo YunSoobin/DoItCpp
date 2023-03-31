@@ -1,0 +1,63 @@
+#include <iostream>
+#include <vector>
+#include <limits.h>
+#include <queue>
+using namespace std;
+
+typedef pair<int, int> node;
+
+int main()
+{
+  ios::sync_with_stdio(false);
+  cin.tie(NULL);
+  cout.tie(NULL);
+
+  int N, M;
+  cin >> N >> M;
+
+  vector<vector<pair<int, int>>> graph(N + 1);
+  
+  for(int i = 0; i < M; i++)
+  {
+    int s, e, c;
+    cin >> s >> e >> c;
+
+    graph[s].push_back(make_pair(e, c));
+  }
+
+  int start, end;
+  cin >> start >> end;
+
+  vector<int> cost(N + 1, INT_MAX);
+  cost[start] = 0;
+  
+  priority_queue<node, vector<node>, greater<node>> myqueue;
+  myqueue.push(make_pair(0, start));
+  vector<bool> visited(N + 1, false);
+
+  while(!myqueue.empty())
+  {
+    node now = myqueue.top();
+    int now_cost = now.first;
+    int now_index = now.second;
+    myqueue.pop();
+
+    if(visited[now_index])
+    {
+      continue;
+    }
+    visited[now_index] = true;
+
+    for(node next : graph[now_index])
+    {
+      int next_index = next.first;
+      int next_cost = next.second;
+
+      cost[next_index] = min(cost[next_index], now_cost + next_cost);
+      myqueue.push(make_pair(cost[next_index], next_index));
+    }
+  }
+
+  cout << cost[end];
+  
+}
