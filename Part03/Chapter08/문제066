@@ -1,0 +1,118 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <tuple>
+using namespace std;
+
+typedef tuple<int, int, int> node;
+int find_parent(int a);
+void union_parent(int a, int b);
+bool connect_len();
+static vector<int> parent;
+static int sum = 0, N;
+static priority_queue<node, vector<node>, greater<node>> myqueue;
+
+int main()
+{
+  ios::sync_with_stdio(false);
+  cin.tie(NULL);
+  cout.tie(NULL);
+
+  int graph[50][50];
+  
+  cin >> N;
+
+  parent.resize(N + 1);
+  for(int i = 0; i <= N; i++)
+  {
+    parent[i] = i;
+  }
+  
+  int all = 0;
+  for(int i = 1; i <= N; i++)
+  {
+    string s;
+    cin >> s;
+
+    for(int j = 1; j <= N; j++)
+    {
+      int num = s.at(j - 1) - '0';
+      if(49 <= num && num <= 74)
+      {
+        num -= 48;
+      }
+      else if(17 <= num && num <= 42)
+      {
+        num += 10;
+      }
+      graph[i][j] = num;
+      all += num;
+      if(i != j && num != 0)
+      {
+        myqueue.push(make_tuple(num, i, j));
+      }
+    }
+  }
+
+  if(connect_len())
+  {
+    cout << all - sum;
+  }
+  else
+  {
+    cout << -1;
+  }
+  
+}
+
+int find_parent(int a)
+{
+  if(a == parent[a])
+  {
+    return a;
+  }
+  else
+  {
+    return parent[a] = find_parent(parent[a]);
+  }
+}
+
+void union_parent(int a, int b)
+{
+  a = find_parent(a);
+  b = find_parent(b);
+
+  if(a != b)
+  {
+    parent[b] = a;
+  }
+}
+
+bool connect_len()
+{
+  int count = 0;
+  while(count < N - 1)
+  {
+    if(myqueue.empty())
+    {
+      return false;
+    }
+    
+    node now = myqueue.top();
+    int node1 = get<1>(now);
+    int node2 = get<2>(now);
+    int len = get<0>(now);
+    myqueue.pop();
+
+    if(find_parent(node1) == find_parent(node2))
+    {
+      continue;
+    }
+
+    union_parent(node1, node2);
+    sum += len;
+    count++;
+  }
+
+  return true;
+}
