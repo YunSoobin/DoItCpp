@@ -1,0 +1,79 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <tuple>
+using namespace std;
+
+typedef tuple<int, int, int> node;
+static vector<int> parent;
+int find_parent(int a);
+void union_parent(int a, int b);
+
+int main()
+{
+  ios::sync_with_stdio(false);
+  cin.tie(NULL);
+  cout.tie(NULL);
+
+  int V, E;
+  cin >> V >> E;
+
+  priority_queue<node, vector<node>, greater<node>> myqueue;
+  for(int i = 0; i < E; i++)
+  {
+    int A, B, C;
+    cin >> A >> B >> C;
+
+    myqueue.push(make_tuple(C, A, B));    
+  }
+
+  parent.resize(V + 1);
+  for(int i = 0; i <= V; i++)
+  {
+    parent[i] = i;
+  }
+
+  int count = 0, result = 0;
+  while(count < V - 1)
+  {
+    node now = myqueue.top();
+    int node1 = get<1>(now);
+    int node2 = get<2>(now);
+    int edge = get<0>(now);
+    myqueue.pop();
+
+    if(find_parent(node1) == find_parent(node2))
+    {
+      continue;
+    }
+
+    union_parent(node1, node2);
+    result += edge;
+    count++;
+  }
+
+  cout << result;
+}
+
+int find_parent(int a)
+{
+  if(a == parent[a])
+  {
+    return a;
+  }
+  else
+  {
+    return parent[a] = find_parent(parent[a]);
+  }
+}
+
+void union_parent(int a, int b)
+{
+  a = find_parent(a);
+  b = find_parent(b);
+
+  if(a != b)
+  {
+    parent[b] = a;
+  }
+}
