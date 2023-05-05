@@ -1,0 +1,27 @@
+#include <iostream>
+#include <tuple>
+using namespace std;
+
+int main()
+{
+  ios::sync_with_stdio(false);
+  cin.tie(NULL);
+  cout.tie(NULL);
+
+  int N;
+  cin >> N;
+
+  tuple<long, long, long> graph[91];
+  graph[1] = make_tuple(0, 1, 1);
+
+  for(int i = 2; i <= 90; i++)
+  {
+    long zero = get<2>(graph[i - 1]);
+    long one = get<0>(graph[i - 1]);
+    long all = zero + one;
+
+    graph[i] = make_tuple(zero, one, all);
+  }
+  
+  cout << get<2>(graph[N]);
+}
