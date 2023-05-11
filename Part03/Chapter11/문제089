@@ -1,0 +1,49 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main()
+{
+  ios::sync_with_stdio(false);
+  cin.tie(NULL);
+  cout.tie(NULL);
+
+  int N;
+  cin >> N;
+
+  vector<long> A(N + 1);
+  vector<long> left(N + 1, 0);
+  vector<long> right(N + 1, 0);
+  vector<long> del(N + 1);
+
+  for(int i = 1; i <= N; i++)
+  {
+    cin >> A[i];
+  }
+
+  long max_num = A[1];
+  left[1] = A[1];
+  right[N] = A[N];
+  for(int i = 2; i <= N; i++)
+  {
+    left[i] = max(A[i], left[i - 1] + A[i]);
+    max_num = max(max_num, left[i]);
+  }
+
+  for(int i = N - 1; i >= 1; i--)
+  {
+    right[i] = max(A[i], right[i + 1] + A[i]);
+    max_num = max(max_num, right[i]);
+  }
+
+  del[1] = right[2];
+  del[N] = left[N - 1];
+  for(int i = 2; i <= N - 1; i++)
+  {
+    del[i] = left[i - 1] + right[i + 1];
+    max_num = max(max_num, del[i]);
+  }
+
+  cout << max_num;
+
+}
