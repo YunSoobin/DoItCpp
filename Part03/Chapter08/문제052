@@ -1,0 +1,119 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int find_parent(int a);
+void union_parent(int a, int b);
+static vector<int> parent;
+
+int main()
+{
+  ios::sync_with_stdio(false);
+  cin.tie(NULL);
+  cout.tie(NULL);
+
+  int N, M;
+  cin >> N >> M;
+
+  int truth_count;
+  cin >> truth_count;
+
+  vector<int> truth_people(truth_count + 1);
+  for(int i = 0; i < truth_count; i++)
+  {
+    cin >> truth_people[i];
+  }
+
+  parent.resize(N + 1);
+  for(int i = 0; i <= N; i++)
+  {
+    parent[i] = i;
+  }
+  
+  vector<vector<int>> party_people(M + 1);
+  for(int party = 0; party < M; party++)
+  {
+    int party_count;
+    cin >> party_count;
+
+    int max_num, min_num;
+    for(int p = 0; p < party_count; p++)
+    {
+      int person;
+      cin >> person;
+      party_people[party].push_back(person);
+
+      max_num = 0;
+      if(p >= 1)
+      {
+        max_num = max(parent[party_people[party][p]], parent[party_people[party][p - 1]]);
+        min_num = min(parent[party_people[party][p]], parent[party_people[party][p - 1]]);
+        union_parent(party_people[party][p], party_people[party][p - 1]);
+      }
+    }
+
+    if(max_num != 0)
+    {
+      for(int i = 1; i <= N; i++)
+      {
+        if(parent[i] == max_num)
+        {
+          parent[i] = min_num;
+        }
+      }
+    }
+  }
+
+  vector<bool> result(M + 1, true);
+  for(int party = 0; party < M; party++)
+  {
+    for(int p = 0; p < party_people[party].size(); p++)
+    {
+      for(int t = 0; t < truth_count; t++)
+      {
+        if(parent[party_people[party][p]] == parent[truth_people[t]])
+        {
+          result[party] = false;
+          break;
+        }
+      }
+    }
+  }
+
+  int result_count = 0;
+  for(int i = 0; i < M; i++)
+  {
+    if(result[i] == true)
+    {
+      result_count++;
+    }
+  }
+
+  cout << result_count;
+
+  return 0;
+}
+
+int find_parent(int a)
+{
+  if(a == parent[a])
+  {
+    return parent[a];
+  }
+  return parent[a] = find_parent(parent[a]);
+}
+
+void union_parent(int a, int b)
+{
+  a = find_parent(a);
+  b = find_parent(b);
+
+  if(a < b)
+  {
+    parent[b] = a;
+  }
+  else if(b < a)
+  {
+    parent[a] = b;
+  }
+}
