@@ -1,0 +1,69 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+void DFS(int n);
+static vector<vector<int>> graph;
+static vector<bool> visited;
+static int num;
+
+int main()
+{
+  ios::sync_with_stdio(false);
+  cin.tie(NULL);
+  cout.tie(NULL);
+
+  int N, M;
+  cin >> N >> M;
+
+  graph.resize(N + 1);
+  for(int i = 0; i < M; i++)
+  {
+    int A, B;
+    cin >> A >> B;
+    graph[B].push_back(A);
+  }
+
+  visited.resize(N + 1, false);
+  vector<int> count(N + 1, 0);
+  for(int i = 1; i <= N; i++)
+  {
+    fill(visited.begin(), visited.end(), false);
+    num = 0;
+    DFS(i);
+    count[i] = num;
+  }
+  
+  int max = 0;
+  for(int i = 1; i <= N; i++)
+  {
+    if(max < count[i])
+    {
+      max = count[i];
+    }
+  }
+
+  for(int i = 1; i <= N; i++)
+  {
+    if(count[i] == max)
+    {
+      cout << i << " ";
+    }
+  }
+
+  return 0;
+}
+
+void DFS(int n)
+{
+  visited[n] = true;
+  num++;
+
+  for(int node : graph[n])
+  {
+    if(visited[node] == false)
+    {
+      DFS(node);
+    }
+  }
+}
