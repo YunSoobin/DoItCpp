@@ -1,0 +1,33 @@
+#include <iostream>
+using namespace std;
+
+int main() 
+{
+  ios::sync_with_stdio(false);
+  cin.tie(NULL);
+  cout.tie(NULL);
+
+  int N;
+  cin >> N;
+
+  int count[N + 1];
+  count[0] = 0;
+  for(int i = 1; i <= N; i++)
+  {
+    count[i] = i - 1;
+    
+    if(i % 3 == 0)
+    {
+      count[i] = min(count[i], count[i / 3] + 1);
+    }
+    if(i % 2 == 0)
+    {
+      count[i] = min(count[i], count[i / 2] + 1);
+    }
+
+    count[i] = min(count[i], count[i - 1] + 1);
+  }
+
+  cout << count[N];
+
+}
