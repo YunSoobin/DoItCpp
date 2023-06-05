@@ -1,0 +1,69 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main()
+{
+  ios::sync_with_stdio(false);
+  cin.tie(NULL);
+  cout.tie(NULL);
+
+  string str;
+  cin >> str;
+
+  vector<int> minus_numbers;
+  vector<int> plus_numbers;
+  string num;
+  int minus_index = -1;
+
+  for(int i = 0; i < str.length(); i++)
+  {
+    if(str[i] == '-')
+    {
+      minus_index = i;
+      break;
+    }
+    else if(str[i] == '+')
+    {
+      plus_numbers.push_back(stoi(num));
+      num.erase();
+    }
+    else
+    {
+      num += str[i];
+    }
+  }
+  plus_numbers.push_back(stoi(num));
+  num.erase();
+
+  if(minus_index > -1)
+  {
+    for(int i = minus_index + 1; i < str.length(); i++)
+    {
+      if(str[i] == '-' || str[i] == '+')
+      {
+        minus_numbers.push_back(stoi(num));
+        num.erase();
+      }
+      else
+      {
+        num += str[i];
+      }
+    }
+    minus_numbers.push_back(stoi(num));
+  }
+
+  int result = 0;
+  for(int i = 0; i < plus_numbers.size(); i++)
+  {
+    result += plus_numbers[i];
+  }
+  for(int i = 0; i < minus_numbers.size(); i++)
+  {
+    result -= minus_numbers[i];
+  }
+
+  cout << result;
+
+  return 0;
+}
