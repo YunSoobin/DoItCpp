@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-
 using namespace std;
 
 int main()
@@ -12,39 +11,30 @@ int main()
   int M, N;
   cin >> M >> N;
 
-  vector<int> arr(N + 1);
   vector<bool> prime(N + 1, true);
   prime[0] = false;
   prime[1] = false;
   
-  for(int i = 0; i <= N; i++)
-  {
-    arr[i] = i;
-  }
-
   for(int i = 2; i <= N; i++)
   {
-    if(prime[i] == false)
+    if(prime[i])
     {
-      continue;
-    }
-    int j = 2;
-    while(i * j <= N)
-    {
-      if(prime[i * j] == true)
+      int j = 2;
+      while(i * j <= N)
       {
         prime[i * j] = false;
+        j++;
       }
-      j++;
     }
   }
 
   for(int i = M; i <= N; i++)
   {
-    if(prime[i] == true)
+    if(prime[i])
     {
       cout << i << "\n";
     }
   }
-  
+
+  return 0;
 }
