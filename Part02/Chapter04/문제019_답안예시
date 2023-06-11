@@ -68,7 +68,7 @@ int partition(vector<int> &A, int S, int E)
     {
       j--;
     }
-    // 피벗보다 크느 수가 나올 때까지 i++
+    // 피벗보다 큰 수가 나올 때까지 i++
     while(pivot > A[i] && i < A.size() - 1)
     {
       i++;
