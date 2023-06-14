@@ -1,0 +1,47 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main()
+{
+  ios::sync_with_stdio(false);
+  cin.tie(NULL);
+  cout.tie(NULL);
+
+  int N;
+  cin >> N;
+
+  vector<bool> result(N + 1, false);
+
+  for(int i = N; i >= 1; i--)
+  {
+    int sum = 0;
+
+    for(int j = i; j >= 1; j--)
+    {
+      sum += j;
+      if(sum == N)
+      {
+        result[i] = true;
+        break;
+      }
+      else if(sum > N)
+      {
+        break;
+      }
+    }
+  }
+
+  int count = 0;
+  for(int i = 1; i <= N; i++)
+  {
+    if(result[i])
+    {
+      count++;
+    }
+  }
+
+  cout << count;
+
+  return 0;
+}
