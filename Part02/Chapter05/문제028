@@ -1,0 +1,89 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+typedef pair<int, int> node;
+
+void DFS(int n);
+static vector<vector<node>> graph;
+static vector<int> lens;
+static vector<bool> visited;
+
+int main()
+{
+  ios::sync_with_stdio(false);
+  cin.tie(NULL);
+  cout.tie(NULL);
+
+  int V;
+  cin >> V;
+  
+  graph.resize(V + 1);
+  lens.resize(V + 1);
+  visited.resize(V + 1);
+  int now, next, len;
+  for(int i = 0; i < V; i++)
+  {
+    cin >> now;
+
+    while(true)
+    {
+      cin >> next;
+      if(next == -1)
+      {
+        break;
+      }
+      cin >> len;
+      
+      graph[now].push_back(make_pair(next, len));
+    }
+  }
+
+  fill(lens.begin(), lens.end(), 0);
+  fill(visited.begin(), visited.end(), false);
+  DFS(1);
+
+  int max_num = 0, max_index = 0;
+  for(int i = 1; i <= V; i++)
+  {
+    if(max_num < lens[i])
+    {
+      max_num = lens[i];
+      max_index = i;
+    }
+  }
+  
+  fill(lens.begin(), lens.end(), 0);
+  fill(visited.begin(), visited.end(), false);
+  DFS(max_index);
+
+  max_num = 0;
+  for(int i = 1; i <= V; i++)
+  {
+    if(max_num < lens[i])
+    {
+      max_num = lens[i];
+    }
+  }
+   
+  cout << max_num;
+  
+  return 0;
+}
+
+void DFS(int n)
+{
+  visited[n] = true;
+
+  for(node next : graph[n])
+  {
+    int node = next.first;
+    int len = next.second;
+
+    if(!visited[node])
+    {
+      lens[node] = lens[n] + len;
+      DFS(node);
+    }
+  }
+}
