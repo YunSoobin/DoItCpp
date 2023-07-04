@@ -1,0 +1,50 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+using namespace std;
+
+int main()
+{
+  ios::sync_with_stdio(false);
+  cin.tie(NULL);
+  cout.tie(NULL);
+
+  long A, B;
+  cin >> A >> B;
+
+  vector<int> prime(10000001);
+  for(int i = 0; i < 10000001; i++)
+  {
+    prime[i] = i;
+  }
+
+  for(int i = 2; i < 10000001; i++)
+  {
+    if(prime[i] != 0)
+    {
+      for(int j = 2; i * j < 10000001; j++)
+      {
+        prime[i * j] = 0;  // 소수가 아님
+      }
+    }
+  }
+
+  int count = 0;
+  for(int i = 2; i < 10000001; i++)
+  {
+    if(prime[i] != 0)
+    {
+      for(int j = 2; pow(i, j) <= B; j++)
+      {
+        if(A <= pow(i, j))
+        {
+          count++;
+        }
+      }
+    }
+  }
+
+  cout << count;
+  
+  return 0;
+}
