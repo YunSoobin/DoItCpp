@@ -1,8 +1,7 @@
 #include <iostream>
-#include <tuple>
 using namespace std;
 
-int main()
+int main() 
 {
   ios::sync_with_stdio(false);
   cin.tie(NULL);
@@ -11,17 +10,16 @@ int main()
   int N;
   cin >> N;
 
-  tuple<long, long, long> graph[91];
-  graph[1] = make_tuple(0, 1, 1);
+  long count[N + 1];
+  count[1] = 1;
+  count[2] = 1;
 
-  for(int i = 2; i <= 90; i++)
+  for(int i = 3; i <= N; i++)
   {
-    long zero = get<2>(graph[i - 1]);
-    long one = get<0>(graph[i - 1]);
-    long all = zero + one;
-
-    graph[i] = make_tuple(zero, one, all);
+    count[i] = count[i - 2] + count[i - 1];
   }
-  
-  cout << get<2>(graph[N]);
+
+  cout << count[N];
+
+  return 0;
 }
