@@ -1,0 +1,91 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+void DFS(int node);
+static vector<vector<int>> graph;
+static vector<bool> visited;
+static vector<int> group;
+static bool biGraph;
+
+int main()
+{
+  ios::sync_with_stdio(false);
+  cin.tie(NULL);
+  cout.tie(NULL);
+
+  int K;
+  cin >> K;
+
+  for(int k = 0; k < K; k++)
+  {
+    int V, E;
+    cin >> V >> E;
+
+    graph.resize(V + 1);
+    visited.resize(V + 1, false);
+    group.resize(V + 1, 0);
+
+    for(int e = 0; e < E; e++)
+    {
+      int u, v;
+      cin >> u >> v;
+
+      graph[u].push_back(v);
+      graph[v].push_back(u);
+    }
+
+    biGraph = true;
+    
+    for(int v = 1; v <= V; v++)
+    {
+      if(biGraph)
+      {
+        DFS(v);
+      }
+      else
+      {
+        break;
+      }
+    }
+
+    if(biGraph)
+    {
+      cout << "YES\n";
+    }
+    else
+    {
+      cout << "NO\n";
+    }
+
+    for(int v = 1; v <= V; v++)
+    {
+      graph[v].clear();
+      visited[v] = false;
+      group[v] = 0;
+    }
+  }
+
+  return 0;
+}
+
+void DFS(int node)
+{
+  visited[node] = true;
+
+  for(int next : graph[node])
+  {
+    if(visited[next])
+    {
+      if(group[next] == group[node])
+      {
+        biGraph = false;
+      }
+    }
+    else
+    {
+      group[next] = (group[node] + 1) % 2;
+      DFS(next);
+    }
+  }
+}
