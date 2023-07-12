@@ -1,13 +1,12 @@
 #include <iostream>
 #include <vector>
-#include <queue>
 #include <tuple>
+#include <algorithm>
 using namespace std;
 
-typedef tuple<int, int, int> node;
-static vector<int> parent;
-int find_parent(int a);
+int find_parent(int n);
 void union_parent(int a, int b);
+static vector<int> parent;
 
 int main()
 {
@@ -18,14 +17,18 @@ int main()
   int V, E;
   cin >> V >> E;
 
-  priority_queue<node, vector<node>, greater<node>> myqueue;
+  vector<tuple<int, int, int>> graph;
+  
   for(int i = 0; i < E; i++)
   {
     int A, B, C;
     cin >> A >> B >> C;
 
-    myqueue.push(make_tuple(C, A, B));    
+    graph.push_back(make_tuple(C, A, B));
   }
+
+  sort(graph.begin(), graph.end());
+  reverse(graph.begin(), graph.end());
 
   parent.resize(V + 1);
   for(int i = 0; i <= V; i++)
@@ -33,37 +36,37 @@ int main()
     parent[i] = i;
   }
 
-  int count = 0, result = 0;
-  while(count < V - 1)
+  int count = 1;
+  long result = 0;
+  while(count < V)
   {
-    node now = myqueue.top();
-    int node1 = get<1>(now);
-    int node2 = get<2>(now);
-    int edge = get<0>(now);
-    myqueue.pop();
+    int cost = get<0>(graph.back());
+    int node1 = get<1>(graph.back());
+    int node2 = get<2>(graph.back());
+    graph.pop_back();
 
-    if(find_parent(node1) == find_parent(node2))
+    if(find_parent(node1) != find_parent(node2))
     {
-      continue;
+      count++;
+      result += cost;
+      union_parent(node1, node2);
     }
-
-    union_parent(node1, node2);
-    result += edge;
-    count++;
   }
 
   cout << result;
+
+  return 0;
 }
 
-int find_parent(int a)
+int find_parent(int n)
 {
-  if(a == parent[a])
+  if(parent[n] == n)
   {
-    return a;
+    return n;
   }
   else
   {
-    return parent[a] = find_parent(parent[a]);
+    return parent[n] = find_parent(parent[n]);
   }
 }
 
@@ -72,8 +75,12 @@ void union_parent(int a, int b)
   a = find_parent(a);
   b = find_parent(b);
 
-  if(a != b)
+  if(a < b)
   {
     parent[b] = a;
+  }
+  else if(b < a)
+  {
+    parent[a] = b;
   }
 }
