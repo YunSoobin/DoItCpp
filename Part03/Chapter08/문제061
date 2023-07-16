@@ -1,5 +1,5 @@
 #include <iostream>
-#include <limits.h>
+#include <vector>
 using namespace std;
 
 int main()
@@ -11,20 +11,10 @@ int main()
   int n, m;
   cin >> n >> m;
 
-  int graph[101][101];
+  vector<vector<int>> cost(n + 1, vector<int> (n + 1, 10000000));
   for(int i = 1; i <= n; i++)
   {
-    for(int j = 1; j <= n; j++)
-    {
-      if(i == j)
-      {
-        graph[i][j] = 0;
-      }
-      else
-      {
-        graph[i][j] = 10000001;
-      }
-    }
+    cost[i][i] = 0;
   }
   
   for(int i = 0; i < m; i++)
@@ -32,17 +22,16 @@ int main()
     int a, b, c;
     cin >> a >> b >> c;
 
-    graph[a][b] = min(graph[a][b], c);
+    cost[a][b] = min(cost[a][b], c);
   }
 
-  
   for(int k = 1; k <= n; k++)
   {
     for(int i = 1; i <= n; i++)
     {
       for(int j = 1; j <= n; j++)
       {
-        graph[i][j] = min(graph[i][j], graph[i][k] + graph[k][j]);
+        cost[i][j] = min(cost[i][j], cost[i][k] + cost[k][j]);
       }
     }
   }
@@ -51,15 +40,17 @@ int main()
   {
     for(int j = 1; j <= n; j++)
     {
-      if(graph[i][j] == 10000001)
+      if(cost[i][j] == 10000000)
       {
-        cout << 0 << " ";
+        cout << "0 ";
       }
       else
       {
-        cout << graph[i][j] << " ";
+        cout << cost[i][j] << " ";
       }
     }
     cout << "\n";
   }
+
+  return 0;
 }
