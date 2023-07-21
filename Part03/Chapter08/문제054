@@ -12,59 +12,64 @@ int main()
   int N;
   cin >> N;
 
-  vector<int> time(N + 1);
+  vector<int> time(N + 1, 0);
   vector<int> indegree(N + 1, 0);
-  vector<vector<int>> out_node(N + 1);
-  
+  vector<vector<int>> outnode(N + 1);
   for(int i = 1; i <= N; i++)
   {
     cin >> time[i];
 
     while(true)
     {
-      int before;
-      cin >> before;
-      if(before == -1)
+      int pre;
+      cin >> pre;
+      if(pre == -1)
       {
         break;
       }
+
       indegree[i]++;
-      out_node[before].push_back(i);
+      outnode[pre].push_back(i);
     }
   }
 
+  queue<int> myqueue;
   vector<int> result(N + 1, 0);
-  queue<int> queue;
-  
   for(int i = 1; i <= N; i++)
   {
     if(indegree[i] == 0)
     {
-      queue.push(i);
+      myqueue.push(i);
     }
   }
 
-  while(!queue.empty())
+  vector<bool> visited(N + 1, false);
+  while(!myqueue.empty())
   {
-    int now = queue.front();
-    queue.pop();
+    int now = myqueue.front();
+    myqueue.pop();
+    visited[now] = true;
 
-    result[now] += time[now];
-
-    for(int n : out_node[now])
+    for(int next : outnode[now])
     {
-      indegree[n]--;
-      if(indegree[n] == 0)
+      if(!visited[next])
       {
-        queue.push(n);
-      }
+        indegree[next]--;
+        result[next] = max(result[next], result[now] + time[now]);
 
-      result[n] = max(result[n], result[now]);
+        if(indegree[next] == 0)
+        {
+          myqueue.push(next);
+        }
+      }
     }
   }
 
-  for(int i = 1; i <= N; i++)
+  for(int i = 1; i <= N;i++)
   {
+    result[i] += time[i];
     cout << result[i] << "\n";
   }
+  
+  return 0;
 }
