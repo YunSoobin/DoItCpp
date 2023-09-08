@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-using namespace std;
+using namespace std; 
 
 int main()
 {
@@ -11,19 +11,29 @@ int main()
   int N, M;
   cin >> N >> M;
 
+  vector<int> A(N);
   vector<int> sum(N, 0);
-  int num;
-  for(int i = 0; i < N; i++)
+  for(int n = 0; n < N; n++)
   {
-    cin >> num;
-    sum[i] = sum[i - 1] + num;
+    cin >> A[n];
+    
+    if(n == 0)
+    {
+      sum[n] = A[n];
+    }
+    else
+    {
+      sum[n] = sum[n - 1] + A[n];
+    }
   }
 
-  int start, end;
-  for(int i = 0; i < M; i++)
+  for(int n = 0; n < M; n++)
   {
-    cin >> start >> end;
-    cout << sum[end - 1] - sum[start - 2] << endl;
+    int i, j;
+    cin >> i >> j;
+
+    cout << sum[j - 1] - sum[i - 2] << "\n";
   }
   
+  return 0;
 }
