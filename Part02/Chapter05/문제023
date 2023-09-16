@@ -1,0 +1,70 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+void union_parent(int a, int b);
+int find_parent(int a);
+static vector<int> parent;
+
+int main()
+{
+  ios::sync_with_stdio(false);
+  cin.tie(NULL);
+  cout.tie(NULL);
+
+  int N, M;
+  cin >> N >> M;
+
+  parent.resize(N + 1);
+  for(int i = 0; i <= N; i++)
+  {
+    parent[i] = i;
+  }
+
+  for(int i = 0; i < M; i++)
+  {
+    int u, v;
+    cin >> u >> v;
+    union_parent(u, v);
+  }
+
+  int count = 0;
+  for(int i = 1; i <= N; i++)
+  {
+    if(i == parent[i])
+    {
+      count++;
+    }
+  }
+
+  cout << count;
+  
+  return 0;
+}
+
+void union_parent(int a, int b)
+{
+  a = find_parent(a);
+  b = find_parent(b);
+
+  if(a < b)
+  {
+    parent[b] = a;
+  }
+  else if(a > b)
+  {
+    parent[a] = b;
+  }
+}
+
+int find_parent(int a)
+{
+  if(a == parent[a])
+  {
+    return parent[a];
+  }
+  else
+  {
+    return parent[a] = find_parent(parent[a]);
+  }
+}
