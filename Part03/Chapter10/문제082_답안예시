@@ -45,7 +45,7 @@ int main()
         cout << "a";
         N--;
       }
-      else
+      else  // 모든 경우의 수가 K보다 작으면
       {
         cout << "z";
         K = K - D[N - 1 + M][M];  // K값 업데이트
