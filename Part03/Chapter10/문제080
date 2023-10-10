@@ -1,0 +1,41 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main()
+{
+  ios::sync_with_stdio(false);
+  cin.tie(NULL);
+  cout.tie(NULL);
+
+  int M, N = 0, K;
+  cin >> M;
+
+  vector<int> count(M + 1);
+  for(int i = 0; i < M; i++)
+  {
+    cin >> count[i];
+    N += count[i];
+  }
+
+  cin >> K;
+
+  double result = 0.0;
+  for(int m = 0; m < M; m++)
+  {
+    double percent = 1.0;
+    if(count[m] >= K)
+    {
+      for(int i = 0; i < K; i++)
+      {
+        percent *= (double)(count[m] - i) / (N - i);
+      }
+      result += percent;
+    }
+  }
+
+  cout.precision(9);
+  cout << result;  
+
+  return 0;
+}
