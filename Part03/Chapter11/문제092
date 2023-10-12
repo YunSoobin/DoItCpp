@@ -1,0 +1,29 @@
+#include <iostream>
+using namespace std;
+
+int main()
+{
+  ios::sync_with_stdio(false);
+  cin.tie(NULL);
+  cout.tie(NULL);
+
+  int N, L, R;
+  cin >> N >> L >> R;
+
+  long building[101][101][101] = {0};
+  building[1][1][1] = 1;
+  for(int n = 2; n <= N; n++)
+  {
+    for(int l = 1; l <= n; l++)
+    {
+      for(int r = 1; r <= n; r++)
+      {
+        building[n][l][r] = (building[n - 1][l - 1][r] + building[n - 1][l][r - 1] + (n - 2) * building[n - 1][l][r]) % 1000000007; 
+      }
+    }
+  }
+  
+  cout << building[N][L][R];
+
+  return 0;
+}
